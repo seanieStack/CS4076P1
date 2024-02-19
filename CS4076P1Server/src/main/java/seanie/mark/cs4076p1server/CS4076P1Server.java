@@ -48,6 +48,7 @@ public class CS4076P1Server {
             try {
 
                 String action = message.substring(0, 2);
+                String details = message.substring(2, message.length());
 
                 List<String> possibleActions = Arrays.asList("ac", "rc", "ds");
                 if(!possibleActions.contains(action)){
@@ -56,13 +57,13 @@ public class CS4076P1Server {
 
                 switch (action) {
                     case "ac" -> { //add class
-                        // handle add class
+                        out.println("You added class");
                     }
                     case "rc" -> { //remove class
-                        // handle remove class
+                        out.println("You removed class");
                     }
                     case "ds" -> { //display schedule
-                        // handle display schedule
+                        out.println("You displayed schedule");
                     }
                 }
             }catch (IncorrectActionException e){
