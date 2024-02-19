@@ -1,11 +1,17 @@
 package seanie.mark.cs4076p1server;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.*;
+import java.util.Arrays;
+import java.util.List;
+import seanie.mark.cs4076p1server.exceptions.IncorrectActionException;
 
 /**
  *
- * @author Seani
+ * @author Seanie
  */
 public class CS4076P1Server {
 
@@ -14,6 +20,7 @@ public class CS4076P1Server {
     private static int clientConnections = 0;
     
     public static void main(String[] args) {
+
         try{
             servSock = new ServerSocket(PORT);
         } catch(IOException e){
@@ -27,11 +34,41 @@ public class CS4076P1Server {
     }
     private static void run(){
         
-        Socket link = null;
+        Socket link;
         
         try{
             link = servSock.accept();
             clientConnections++;
+
+            BufferedReader in = new BufferedReader(new InputStreamReader(link.getInputStream()));
+            PrintWriter out = new PrintWriter(link.getOutputStream(), true);
+
+            String message = in.readLine();
+
+            try {
+
+                String action = message.substring(0, 2);
+
+                List<String> possibleActions = Arrays.asList("ac", "rc", "ds");
+                if(!possibleActions.contains(action)){
+                    throw new IncorrectActionException("Incorrect action");
+                }
+
+                switch (action) {
+                    case "ac" -> { //add class
+                        // handle add class
+                    }
+                    case "rc" -> { //remove class
+                        // handle remove class
+                    }
+                    case "ds" -> { //display schedule
+                        // handle display schedule
+                    }
+                }
+            }catch (IncorrectActionException e){
+                out.println(e.getMessage());
+            }
+
         }catch(IOException e){
             e.printStackTrace();
         }
