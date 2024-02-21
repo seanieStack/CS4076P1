@@ -11,7 +11,8 @@ import java.net.*;
  * @author Seani
  */
 public class CS4076P1ClientNoguiTest {
-    
+    //message to send layout
+    //action(ac, rc, ds, st) moduleCode time(00:00-00:00) day room
     private static InetAddress host;
     private static final int PORT = 6558;
     

@@ -11,6 +11,8 @@ import javafx.stage.Stage;
  * JavaFX App
  */
 public class App extends Application {
+    //message to send layout
+    //action(ac, rc, ds, st) moduleCode time(00:00-00:00) day room
 
     @Override
     public void start(Stage stage) {

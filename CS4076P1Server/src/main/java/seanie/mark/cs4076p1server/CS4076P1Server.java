@@ -56,6 +56,7 @@ public class CS4076P1Server {
             PrintWriter out = new PrintWriter(link.getOutputStream(), true);
 
             String message = in.readLine();
+            //(ac, rc, ds, st) (moduleCode time(00:00-00:00) day room)
 
             try {
 
