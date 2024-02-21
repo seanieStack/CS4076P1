@@ -8,3 +8,7 @@
 ## Server responces
 `ttf` -> timetable full  
 `cs`-> class added  
+
+## Example messages from client -> server
+`ac CS4076 09:00-10:00 monday CS4005B`  
+`st`
