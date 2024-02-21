@@ -26,7 +26,7 @@ Messages adhere to a structured format to facilitate clear and efficient communi
    - Format: `ac <ModuleCode> <StartTime-EndTime> <Day> <Room>`
    - Example: `ac CS4076 09:00-10:00 monday CS4005B`
 2. **Remove Class (`rc`)**: Requires the module code parameter only.
-   - Format: `rc <ModuleCode>`
+   - Format: `rc <ModuleCode> <StartTime-EndTime> <Day> <Room>`
 3. **Display Schedule (`ds`)**: No additional parameters required.
 4. **Terminate Connection (`st`)**: No additional parameters required.
 
