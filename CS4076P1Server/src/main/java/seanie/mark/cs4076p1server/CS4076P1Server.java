@@ -26,6 +26,7 @@ public class CS4076P1Server {
     //server responses
     //ttf = timetable full
     //ca = class added
+    //ol = class overlaps
 
     private static ServerSocket servSock;
     private static final int PORT = 6558;
@@ -57,6 +58,7 @@ public class CS4076P1Server {
 
             String message = in.readLine();
             //(ac, rc, ds, st) (moduleCode time(00:00-00:00) day room)
+            System.out.println("Message received: " + message);
 
             try {
 
@@ -65,7 +67,7 @@ public class CS4076P1Server {
 
                 List<String> possibleActions = Arrays.asList("ac", "rc", "ds", "st");
                 if(!possibleActions.contains(action)){
-                    throw new IncorrectActionException("Incorrect action");
+                    throw new IncorrectActionException("Incorrect action\n");
                 }
 
                 switch (action) {
@@ -89,14 +91,18 @@ public class CS4076P1Server {
     private static void addClass(String details, List<Module> currentModules, PrintWriter out) {
         if(currentModules.size() < 5){
             // details will look like "CS4076 09:00-10:00 monday CS4005B"
-            String[] parts = details.split(" ");
+            String[] parts = details.strip().split(" ");
 
             String moduleCode = parts[0];
             String time = parts[1];
             String day = parts[2];
             String room = parts[3];
 
-            //todo: check if class overlaps with another class
+            boolean overlapping = UtilityFunctions.checkOverlap(time, day, currentModules);
+            if(overlapping){
+                out.println("ol\n");
+                return;
+            }
 
             //Gets the module codes of the current modules
             List<String> currentModulesNames = new ArrayList<>();
@@ -118,14 +124,18 @@ public class CS4076P1Server {
                 }
             }
             // send message to client to say that the class was added successfully
-            out.println("ca");
+            out.println("ca\n");
 
         }
         else {
             // send message to client to say that the timetable is full
-            out.println("ttf");
+            out.println("ttf\n");
         }
     }
+
+
+
+
 
     private static void removeClass(String details, List<Module> currentModules) {
         //todo: implement removeClass
