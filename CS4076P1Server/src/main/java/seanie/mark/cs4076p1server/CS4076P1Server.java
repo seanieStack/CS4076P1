@@ -39,7 +39,7 @@ public class CS4076P1Server {
             System.out.println("Unable to attach port!");
             System.exit(1);
         }
-        
+
         do{
             run();
         }while(true);
@@ -56,7 +56,9 @@ public class CS4076P1Server {
             BufferedReader in = new BufferedReader(new InputStreamReader(link.getInputStream()));
             PrintWriter out = new PrintWriter(link.getOutputStream(), true);
 
-            while(true) {
+            boolean running = true;
+
+            while(running) {
 
 
                 String message = in.readLine();
@@ -74,12 +76,13 @@ public class CS4076P1Server {
                     }
 
                     switch (action) {
-                        case "ac" -> out.println(addClass(details, currentModules, out));
+                        case "ac" -> out.println(addClass(details, currentModules));
                         case "rc" -> removeClass(details, currentModules);
                         case "ds" -> displaySchedule(details, currentModules);
                         case "st" -> {
                             out.println("TERMINATE");
                             link.close();
+                            running = false;
                         }
                     }
                 } catch (IncorrectActionException e) {
@@ -88,11 +91,11 @@ public class CS4076P1Server {
             }
 
         }catch(IOException e){
-            e.printStackTrace();
+            System.out.println("Error when connecting to client" + Arrays.toString(e.getStackTrace()));
         }
     }
 
-    private static String addClass(String details, List<Module> currentModules, PrintWriter out) {
+    private static String addClass(String details, List<Module> currentModules) {
         if(currentModules.size() < 5){
             // details will look like "CS4076 09:00-10:00 monday CS4005B"
             String[] parts = details.strip().split(" ");
@@ -104,6 +107,7 @@ public class CS4076P1Server {
 
             boolean overlapping = UtilityFunctions.checkOverlap(time, day, currentModules);
             if(overlapping){
+                // send message to client to say that the class overlaps
                 return "ol";
             }
 
