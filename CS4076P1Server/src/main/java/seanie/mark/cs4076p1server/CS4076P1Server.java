@@ -56,31 +56,35 @@ public class CS4076P1Server {
             BufferedReader in = new BufferedReader(new InputStreamReader(link.getInputStream()));
             PrintWriter out = new PrintWriter(link.getOutputStream(), true);
 
-            String message = in.readLine();
-            //(ac, rc, ds, st) (moduleCode time(00:00-00:00) day room)
-            System.out.println("Message received: " + message);
+            while(true) {
 
-            try {
 
-                String action = message.substring(0, 2);
-                String details = message.substring(2);
+                String message = in.readLine();
+                //(ac, rc, ds, st) (moduleCode time(00:00-00:00) day room)
+                System.out.println("Message received: " + message);
 
-                List<String> possibleActions = Arrays.asList("ac", "rc", "ds", "st");
-                if(!possibleActions.contains(action)){
-                    throw new IncorrectActionException("Incorrect action\n");
-                }
+                try {
 
-                switch (action) {
-                    case "ac" -> addClass(details, currentModules, out);
-                    case "rc" -> removeClass(details, currentModules);
-                    case "ds" -> displaySchedule(details, currentModules);
-                    case "st" -> {
-                        out.println("TERMINATE");
-                        link.close();
+                    String action = message.substring(0, 2);
+                    String details = message.substring(2);
+
+                    List<String> possibleActions = Arrays.asList("ac", "rc", "ds", "st");
+                    if (!possibleActions.contains(action)) {
+                        throw new IncorrectActionException("Incorrect action\n");
                     }
+
+                    switch (action) {
+                        case "ac" -> out.println(addClass(details, currentModules, out));
+                        case "rc" -> removeClass(details, currentModules);
+                        case "ds" -> displaySchedule(details, currentModules);
+                        case "st" -> {
+                            out.println("TERMINATE");
+                            link.close();
+                        }
+                    }
+                } catch (IncorrectActionException e) {
+                    out.println(e.getMessage());
                 }
-            }catch (IncorrectActionException e){
-                out.println(e.getMessage());
             }
 
         }catch(IOException e){
@@ -88,7 +92,7 @@ public class CS4076P1Server {
         }
     }
 
-    private static void addClass(String details, List<Module> currentModules, PrintWriter out) {
+    private static String addClass(String details, List<Module> currentModules, PrintWriter out) {
         if(currentModules.size() < 5){
             // details will look like "CS4076 09:00-10:00 monday CS4005B"
             String[] parts = details.strip().split(" ");
@@ -100,8 +104,7 @@ public class CS4076P1Server {
 
             boolean overlapping = UtilityFunctions.checkOverlap(time, day, currentModules);
             if(overlapping){
-                out.println("ol\n");
-                return;
+                return "ol";
             }
 
             //Gets the module codes of the current modules
@@ -124,12 +127,12 @@ public class CS4076P1Server {
                 }
             }
             // send message to client to say that the class was added successfully
-            out.println("ca\n");
+            return "ca";
 
         }
         else {
             // send message to client to say that the timetable is full
-            out.println("ttf\n");
+            return "ttf";
         }
     }
 
