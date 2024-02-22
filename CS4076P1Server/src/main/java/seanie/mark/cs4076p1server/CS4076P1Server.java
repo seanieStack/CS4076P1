@@ -27,6 +27,11 @@ public class CS4076P1Server {
     //ttf = timetable full
     //ca = class added
     //ol = class overlaps
+    //cr = class removed will contain new free time
+    //nsc = no scheduled class (at that time)
+    //cnf = class not found (class not in timetable)
+    //cp = class printed
+
 
     private static ServerSocket servSock;
     private static final int PORT = 6558;
@@ -77,9 +82,10 @@ public class CS4076P1Server {
 
                     switch (action) {
                         case "ac" -> out.println(addClass(details, currentModules));
-                        case "rc" -> removeClass(details, currentModules);
-                        case "ds" -> displaySchedule(details, currentModules);
+                        case "rc" -> out.println(removeClass(details, currentModules));
+                        case "ds" -> out.println(displaySchedule(details, currentModules));
                         case "st" -> {
+                            System.out.println("TERMINATE");
                             out.println("TERMINATE");
                             link.close();
                             running = false;
@@ -144,12 +150,48 @@ public class CS4076P1Server {
 
 
 
-    private static void removeClass(String details, List<Module> currentModules) {
-        //todo: implement removeClass
+    private static String removeClass(String details, List<Module> currentModules) {
+        String[] parts = details.strip().split(" ");
+
+        String moduleCode = parts[0];
+        String time = parts[1];
+        String day = parts[2];
+        String room = parts[3];
+
+        boolean removed = false;
+
+        for(Module m : currentModules){
+            if(m.getModuleCode().equals(moduleCode) ) {
+                if (m.removeTimetableEntry(time, day, room).equals("cr")) {
+                    removed = true;
+                } else {
+                    return "nsc";
+                }
+            }
+        }
+        if (removed){
+            return "cr" + " " + time + " " + day + " " + room;
+        }
+        else{
+            return "cnf";
+        }
     }
 
-    private static void displaySchedule(String details, List<Module> currentModules) {
-        //todo: implement displaySchedule
+    private static String displaySchedule(String details, List<Module> currentModules) {
+        String[] parts = details.strip().split(" ");
+
+        String moduleCode = parts[0];
+
+        for(Module m : currentModules){
+            if(m.getModuleCode().equals(moduleCode)){
+                List<TimetableEntry> timetable = m.getTimetable();
+                for(TimetableEntry t : timetable){
+                    System.out.println(t.getTime() + " " + t.getDay() + " " + t.getRoom());
+                }
+                return "cp";
+            }
+        }
+        return "cnf";
     }
 
 }

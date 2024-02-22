@@ -23,4 +23,14 @@ public class Module {
     public List<TimetableEntry> getTimetable(){
         return timetable;
     }
+
+    public String removeTimetableEntry(String time, String day, String room) {
+        for(TimetableEntry t : timetable){
+            if(t.getTime().equals(time) && t.getDay().equals(day) && t.getRoom().equals(room)){
+                timetable.remove(t);
+                return "cr";
+            }
+        }
+        return "nsc";
+    }
 }

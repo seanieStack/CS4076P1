@@ -33,4 +33,8 @@ public class TimetableEntry {
     public String getEndTime() {
         return endTime;
     }
+
+    public String getTime() {
+        return startTime + "-" + endTime;
+    }
 }
