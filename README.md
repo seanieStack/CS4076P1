@@ -34,6 +34,7 @@ Messages adhere to a structured format to facilitate clear and efficient communi
 
 - **Timetable Full (`ttf`)**: Indicates no more classes can be added.
 - **Class Added (`cs`)**: Confirms a class has been added to the schedule.
+- **Class overlaps (`ol`)**: Class overlaps with another class in the schedule.
 
 ### Detailed Explanation
 
