@@ -45,12 +45,12 @@ public class CS4076P1Server {
             System.exit(1);
         }
 
+        //noinspection InfiniteLoopStatement
         do{
             run();
         }while(true);
     }
     private static void run(){
-
         Socket link;
         
         try{
@@ -64,7 +64,6 @@ public class CS4076P1Server {
             boolean running = true;
 
             while(running) {
-
 
                 String message = in.readLine();
                 //(ac, rc, ds, st) (moduleCode time(00:00-00:00) day room)
@@ -81,9 +80,9 @@ public class CS4076P1Server {
                     }
 
                     switch (action) {
-                        case "ac" -> out.println(addClass(details, currentModules));
-                        case "rc" -> out.println(removeClass(details, currentModules));
-                        case "ds" -> out.println(displaySchedule(details, currentModules));
+                        case "ac" -> out.println(UtilityFunctions.addClass(details, currentModules));
+                        case "rc" -> out.println(UtilityFunctions.removeClass(details, currentModules));
+                        case "ds" -> out.println(UtilityFunctions.displaySchedule(details, currentModules));
                         case "st" -> {
                             System.out.println("TERMINATE");
                             out.println("TERMINATE");
@@ -95,104 +94,9 @@ public class CS4076P1Server {
                     out.println(e.getMessage());
                 }
             }
-
         }catch(IOException e){
             System.out.println("Error when connecting to client" + Arrays.toString(e.getStackTrace()));
         }
     }
-
-    private static String addClass(String details, List<Module> currentModules) {
-        if(currentModules.size() < 5){
-            // details will look like "CS4076 09:00-10:00 monday CS4005B"
-            String[] parts = details.strip().split(" ");
-
-            String moduleCode = parts[0];
-            String time = parts[1];
-            String day = parts[2];
-            String room = parts[3];
-
-            boolean overlapping = UtilityFunctions.checkOverlap(time, day, currentModules);
-            if(overlapping){
-                // send message to client to say that the class overlaps
-                return "ol";
-            }
-
-            //Gets the module codes of the current modules
-            List<String> currentModulesNames = new ArrayList<>();
-            for(Module m : currentModules){
-                currentModulesNames.add(m.getModuleCode());
-            }
-
-            //If the module is not already in the list, add it
-            if (!currentModulesNames.contains(moduleCode)){
-                Module module = new Module(moduleCode);
-                module.addTimetableEntry(time, day, room);
-                currentModules.add(module);
-            }
-            else{ //If the module is already in the list, add the timetable entry to it
-                for(Module m : currentModules){
-                    if(m.getModuleCode().equals(moduleCode)){
-                        m.addTimetableEntry(time, day, room);
-                    }
-                }
-            }
-            // send message to client to say that the class was added successfully
-            return "ca";
-
-        }
-        else {
-            // send message to client to say that the timetable is full
-            return "ttf";
-        }
-    }
-
-
-
-
-
-    private static String removeClass(String details, List<Module> currentModules) {
-        String[] parts = details.strip().split(" ");
-
-        String moduleCode = parts[0];
-        String time = parts[1];
-        String day = parts[2];
-        String room = parts[3];
-
-        boolean removed = false;
-
-        for(Module m : currentModules){
-            if(m.getModuleCode().equals(moduleCode) ) {
-                if (m.removeTimetableEntry(time, day, room).equals("cr")) {
-                    removed = true;
-                } else {
-                    return "nsc";
-                }
-            }
-        }
-        if (removed){
-            return "cr" + " " + time + " " + day + " " + room;
-        }
-        else{
-            return "cnf";
-        }
-    }
-
-    private static String displaySchedule(String details, List<Module> currentModules) {
-        String[] parts = details.strip().split(" ");
-
-        String moduleCode = parts[0];
-
-        for(Module m : currentModules){
-            if(m.getModuleCode().equals(moduleCode)){
-                List<TimetableEntry> timetable = m.getTimetable();
-                for(TimetableEntry t : timetable){
-                    System.out.println(t.getTime() + " " + t.getDay() + " " + t.getRoom());
-                }
-                return "cp";
-            }
-        }
-        return "cnf";
-    }
-
 }
 
