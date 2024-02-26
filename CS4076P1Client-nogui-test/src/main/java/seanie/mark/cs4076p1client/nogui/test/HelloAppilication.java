@@ -36,7 +36,7 @@ public class HelloApplication extends Application {
         Label endTimeLabel = new Label("End Time:");
         TextField userInputEndTime = new TextField();
 
-        Label dayLabel = new Label("Day:");
+        Label dayLabel = new Label("Day:"); // TODO: Implement drop down menu
         TextField userInputDay = new TextField();
 
         Label roomLabel = new Label("Room:");
@@ -60,8 +60,16 @@ public class HelloApplication extends Application {
             boolean validTimeFormat = VerifyInput.isValidTimeFormat(startTime,endTime);
             boolean validTime = VerifyInput.isValidTime(startTime,endTime);
             boolean differentTime = VerifyInput.isDifferentTime(startTime,endTime);
+            boolean validLength = VerifyInput.isValidSessionLength(startTime,endTime);
+            boolean endsHourly = VerifyInput.endsHourly(startTime,endTime);
+            boolean validModule = VerifyInput.isValidModule(userModule);
 
             errorLabel.setText("");
+
+            //TODO: Refactor to switch / case
+            if (!validModule) {
+                errorLabel.setText("Must be a valid module ! e.g CS4076"); //Working
+            }
 
             if (!validTimeFormat) {
                 errorLabel.setText("Time must be 5 in length !"); // Causes crash
@@ -69,6 +77,10 @@ public class HelloApplication extends Application {
                 errorLabel.setText("Start and end time can not have the same value !"); //Working
             } else if (!validTime) {
                 errorLabel.setText("Start time can not be greater than end time !"); // Working
+            }else if (!validLength) {
+                errorLabel.setText("Module sessions can not exceed 3 hours !"); // Working
+            } else  if (!endsHourly) {
+                errorLabel.setText("Module sessions start and end at only at the beginning and end of hours !"); // Working
             }
 
             // Concatenate the inputs for display
@@ -80,7 +92,7 @@ public class HelloApplication extends Application {
         VBox root = new VBox(10);
         root.setPadding(new Insets(10, 10, 10, 10));
         root.getChildren().addAll(moduleLabel, userInputModule, startTimeLabel, userInputStartTime, endTimeLabel, userInputEndTime, dayLabel, userInputDay, roomLabel, userInputRoom, submitButton, displayText,errorLabel);
-        //root.getChildren().add(errorLabel);
+        
 
 
         // Create a Scene with our layout
@@ -88,7 +100,7 @@ public class HelloApplication extends Application {
 
         // Set the scene to the stage and show it
         stage.setScene(scene);
-        stage.setTitle("JavaFX User Input Example");
+        stage.setTitle("Add Module");
         stage.show();
     }
 
