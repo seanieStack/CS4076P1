@@ -5,9 +5,9 @@ import javafx.scene.control.Button;
 import javafx.scene.input.KeyCode;
 import javafx.application.Platform;
 
-public class Utility {
+public class Utillity {
     //TODO: Implement method for background screen and add to all scenes
-    //TODO: Merge 
+    //TODO: Merge Utillity and VerifyInput
 
 
     public static void qForTermination(Scene scene) {
