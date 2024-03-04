@@ -1,110 +1,76 @@
 package seanie.mark.cs4076p1server;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import javafx.geometry.Insets;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
-import javafx.application.Platform;
-
-
 
 import java.io.IOException;
 
+import static seanie.mark.cs4076p1server.Utillity.quitApp;
+
+
 public class HelloApplication extends Application {
+    private Scene mainScene;
+    private Stage stage;
+
+
+
     @Override
     public void start(Stage stage) throws IOException {
-        Label errorLabel = new Label();
-        errorLabel.setTextFill(Color.RED);
-
-        // Create TextFields for user input
-        Label moduleLabel = new Label("Module:");
-        TextField userInputModule = new TextField();
-
-        Label startTimeLabel = new Label("Start Time:");
-        TextField userInputStartTime = new TextField();
+        this.stage = stage;
 
 
-        Label endTimeLabel = new Label("End Time:");
-        TextField userInputEndTime = new TextField();
+        VBox layout = new VBox(10); // Use a VBox layout with spacing of 10
+        Label welcomelabel = new Label("Please select an option");
 
-        Label dayLabel = new Label("Day:"); // TODO: Implement drop down menu
-        TextField userInputDay = new TextField();
+        Button addModule = new Button("Add Module");
+        addModule.setOnAction(event -> new AddModule(stage,this::returnHome));
 
-        Label roomLabel = new Label("Room:");
-        TextField userInputRoom = new TextField();
+        Button removeModule = new Button("Remove Module");
+        removeModule.setOnAction(event -> new removeModule(stage,this::returnHome));
 
-        // Create a Button to trigger the action
-        Button submitButton = new Button("Submit");
-
-        // Create a Text element to display the result
-        Text displayText = new Text();
-
-        // Set the action when the button is pressed
-        submitButton.setOnAction(e -> {
-            // Get the text from each TextField
-            String userModule = userInputModule.getText();
-            String userDay = userInputDay.getText();
-            String startTime = userInputStartTime.getText();
-            String endTime = userInputEndTime.getText();
-            String userRoom = userInputRoom.getText();
-
-            boolean validTimeFormat = VerifyInput.isValidTimeFormat(startTime,endTime);
-            boolean validTime = VerifyInput.isValidTime(startTime,endTime);
-            boolean differentTime = VerifyInput.isDifferentTime(startTime,endTime);
-            boolean validLength = VerifyInput.isValidSessionLength(startTime,endTime);
-            boolean endsHourly = VerifyInput.endsHourly(startTime,endTime);
-            boolean validModule = VerifyInput.isValidModule(userModule);
-
-            errorLabel.setText("");
-
-            //TODO: Refactor to switch / case
-            if (!validModule) {
-                errorLabel.setText("Must be a valid module ! e.g CS4076"); //Working
-            }
-
-            if (!validTimeFormat) {
-                errorLabel.setText("Time must be 5 in length !"); // Causes crash
-            } else if (!differentTime) {
-                errorLabel.setText("Start and end time can not have the same value !"); //Working
-            } else if (!validTime) {
-                errorLabel.setText("Start time can not be greater than end time !"); // Working
-            }else if (!validLength) {
-                errorLabel.setText("Module sessions can not exceed 3 hours !"); // Working
-            } else  if (!endsHourly) {
-                errorLabel.setText("Module sessions start and end at only at the beginning and end of hours !"); // Working
-            }
-
-            // Concatenate the inputs for display
-            String resultText = "Module: " + userModule + "\nDay: " + userDay + "\nStart Time: " + startTime + "\nEnd Time: " + endTime + "\nRoom: " + userRoom;
-            displayText.setText(resultText);
-        });
-
-        // Create a VBox to hold our elements, add all elements including labels
-        VBox root = new VBox(10);
-        root.setPadding(new Insets(10, 10, 10, 10));
-        root.getChildren().addAll(moduleLabel, userInputModule, startTimeLabel, userInputStartTime, endTimeLabel, userInputEndTime, dayLabel, userInputDay, roomLabel, userInputRoom, submitButton, displayText,errorLabel);
-        
+        Button showTimetable = new Button("Display timetable");
+        showTimetable.setOnAction(event -> new showTimetable(stage,this::returnHome));
+        //showTimetable.setonAction(event -> goToShowTimetable());
+        Button customizeApplication = new Button("Option");
+        Button quitApplication = new Button("Quit application");
+        Scene scene;
+        quitApplication.setOnAction((event -> quitApp() ));
 
 
-        // Create a Scene with our layout
-        Scene scene = new Scene(root, 400, 400); // Adjusted for better visibility
+        layout.getChildren().addAll(welcomelabel, addModule, removeModule, showTimetable, customizeApplication, quitApplication); // Add the button to the layout
 
-        // Set the scene to the stage and show it
-        stage.setScene(scene);
-        stage.setTitle("Add Module");
+        mainScene = new Scene(layout, 400, 400);
+        stage.setScene(mainScene); // Set the scene on the stage
+        stage.setTitle("Welcome Screen"); 
         stage.show();
+        // Press Q to terminate
+        /**
+         scene.setOnKeyPressed(event -> {
+         if (event.getCode()  ==  KeyCode.Q ) {
+         quitApplication();
+         }});
+         }
+         **/
+
+        Utillity.qForTermination(mainScene);
+
+    }
+        public void quitapp () {
+         Platform.exit();
+         }
+
+    public  void returnHome () {
+        stage.setScene(mainScene);
     }
 
-    public static void main(String[] args) {
-        launch(args);
-    }
+    public static void main(String [] args ) {
+
+        launch();
+    } 
 }
+
