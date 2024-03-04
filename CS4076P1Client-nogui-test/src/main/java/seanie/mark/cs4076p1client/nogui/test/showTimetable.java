@@ -33,7 +33,7 @@ public class showTimetable {
             returnToMain.run();
         });
 
-        Utlity.qForTermination(scene); //Q to terminat
+        Utillity.qForTermination(scene); //Q to terminat
 
 
      //GridPane used to display the timetable
