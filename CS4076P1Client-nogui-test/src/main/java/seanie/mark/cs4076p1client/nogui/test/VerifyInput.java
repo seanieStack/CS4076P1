@@ -3,17 +3,18 @@ package seanie.mark.cs4076p1server;
 import java.time.DateTimeException;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+import java.time.Duration;
 
 public class VerifyInput {
 
-    //TODO: Implement a toLocalTime method and incorparate in methods
+   
 
-    public static boolean isValidTimeFormat(String startTime, String endTime) {
-        if (startTime.length() != 5 || endTime.length() != 5) {
-            return false; // Error message
-        } else {
-            return true;
-        }
+   public static LocalTime toLocalTime(String time) {
+        LocalTime newTime = LocalTime.parse(time, DateTimeFormatter.ofPattern("HH:mm"));
+        return newTime;
     }
 
     public static boolean isValidTime(String startTime, String endTime) {
@@ -53,15 +54,7 @@ public class VerifyInput {
         return  true ;
     }
 
-    //TODO: Implement method that ensures start and endtimes end with :00
-    public static boolean endsHourly (String startTime , String endTime) {
-        for (int i = 3 ; i <6 ; i ++) {
-            if (startTime.charAt(i) != 0 || endTime.charAt(i) != 0) {
-                return false;
-            }
-        }
-        return true;
-    }
+    
 
     public static boolean isValidModule(String module) {
         // Check if the module string length is exactly 6
@@ -87,6 +80,24 @@ public class VerifyInput {
 
         // If all checks pass, return true
         return true;
+    }
+
+    //TODO: Improve this my capping digit length after prefix
+    public static boolean isValidRoom(String room) {
+
+        Set<String> campusBuildings = new HashSet<>(Arrays.asList(
+                "SG", "S", "KGB", "KB", "CSG", "CS", "GLG", "GL", "FB", "FG", "F", "ERB", "ER",
+                "LCB", "LC", "LB", "LG", "L", "SR", "PG", "PM", "P", "HSG", "HS", "A", "AM", "B",
+                "BM", "CG", "C", "CM", "DG", "DM", "D", "EG", "E", "EM", "AD", "IWG", "IW",
+                "GEM", "GEMS"
+        ));
+
+        if (!room.contains("-")) {
+            return false;
+        }
+
+        String prefix = room.toUpperCase().split("-")[0];
+        return campusBuildings.contains(prefix);
     }
 
 }
