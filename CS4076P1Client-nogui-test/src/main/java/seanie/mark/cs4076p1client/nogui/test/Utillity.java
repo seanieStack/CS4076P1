@@ -39,5 +39,51 @@ public class Utillity {
         return new String[] {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday"} ;
     }
 
+     //Payload will take the format <CS4096><14:00-15:00><Thursday><KGB-10>
+    public static String[] splitPayload ( String payload) { 
+        //Split spring into parts : Module code [0] , Time[1] , Day [2] and Room [3]
+        String trimmedInput = payload.substring(1, payload.length() - 1);
+
+        // Split the string based on "><" pattern
+        return trimmedInput.split("><");
+    }
+    
+    public static String populateModule (String payload) {
+        return (splitPayload(payload)[1] + " , " + splitPayload(payload)[3]); // Forms formatted String with module info 
+    }
+
+    public static String[] splitTime(String timePart) {
+        return timePart.split("-"); // Splits time into start time [0] and end time [1]
+    }
+    public static int [] moduleNodes (String payload) {
+        String[] days = getDays();
+        String[] times = getTimes();
+        
+        String day = splitPayload(payload)[2];
+      
+
+        // Isolate start and end Times
+        String [] bothTimes =splitTime(splitPayload(payload)[1]);
+
+        //Find matching time
+        int nodeY = 0;
+
+        for (int i = 0; i < times.length; i++) {
+            if (bothTimes[0].equals(times[i])) { // Uses start time for comaprison  
+                nodeY = i + 1; // + 1 to skip header
+                break;
+            }
+        }
+
+        int nodeX = 0;
+        for (int j = 0; j < days.length; j++) {
+            if (day.equals(days[j])) {
+                nodeX = j + 1; //+1 to skip header
+                break;
+            }
+        }
+
+        return new int[]{nodeX,nodeY}; // Returns day (x) and time (y)
+    }
 
 }
