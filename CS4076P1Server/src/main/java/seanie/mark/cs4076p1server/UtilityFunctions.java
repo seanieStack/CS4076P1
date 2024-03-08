@@ -1,7 +1,6 @@
 package seanie.mark.cs4076p1server;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class UtilityFunctions {
     private static int stringTimeToIntTime(String time){
@@ -35,6 +34,49 @@ public class UtilityFunctions {
         return false;
     }
 
+    public static boolean isValidModule(String module) {
+        // Check if the module string length is exactly 6
+        if (module.length() != 6) {
+            return false;
+        }
+
+        // Check the first two characters for letters
+        for (int i = 0; i < 2; i++) {
+            char ch = module.charAt(i);
+            if (!Character.isLetter(ch)) {
+                return false;
+            }
+        }
+
+        // Check the last four characters for digits
+        for (int i = 2; i < 6; i++) {
+            char ch = module.charAt(i);
+            if (!Character.isDigit(ch)) {
+                return false;
+            }
+        }
+
+        // If all checks pass, return true
+        return true;
+    }
+
+    public static boolean isValidRoom(String room) {
+
+        Set<String> campusBuildings = new HashSet<>(Arrays.asList(
+                "SG", "S", "KGB", "KB", "CSG", "CS", "GLG", "GL", "FB", "FG", "F", "ERB", "ER",
+                "LCB", "LC", "LB", "LG", "L", "SR", "PG", "PM", "P", "HSG", "HS", "A", "AM", "B",
+                "BM", "CG", "C", "CM", "DG", "DM", "D", "EG", "E", "EM", "AD", "IWG", "IW",
+                "GEM", "GEMS"
+        ));
+
+        if (!room.contains("-")) {
+            return false;
+        }
+
+        String prefix = room.toUpperCase().split("-")[0];
+        return campusBuildings.contains(prefix);
+    }
+
     static String addClass(String details, List<Module> currentModules) {
         if(currentModules.size() < 5){
             // details will look like "CS4076 09:00-10:00 monday CS4005B"
@@ -45,10 +87,22 @@ public class UtilityFunctions {
             String day = parts[2];
             String room = parts[3];
 
-            boolean overlapping = UtilityFunctions.checkOverlap(time, day, currentModules);
+            boolean overlapping = checkOverlap(time, day, currentModules);
             if(overlapping){
                 // send message to client to say that the class overlaps
                 return "ol";
+            }
+
+            boolean validModule = isValidModule(moduleCode);
+            if (!validModule) {
+                // send message to client to say that the module is invalid
+                return "im";
+            }
+
+            boolean validRoom = isValidRoom(room);
+            if (!validRoom) {
+                // send message to client to say that the room is invalid
+                return "ir";
             }
 
             //Gets the module codes of the current modules

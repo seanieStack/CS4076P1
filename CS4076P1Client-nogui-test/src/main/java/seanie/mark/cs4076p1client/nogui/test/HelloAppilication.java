@@ -1,4 +1,3 @@
-package seanie.mark.cs4076p1server;
 
 import javafx.application.Application;
 import javafx.application.Platform;

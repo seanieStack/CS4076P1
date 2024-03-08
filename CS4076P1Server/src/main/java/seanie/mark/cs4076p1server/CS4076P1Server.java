@@ -86,6 +86,8 @@ public class CS4076P1Server {
                         case "st" -> {
                             System.out.println("TERMINATE");
                             out.println("TERMINATE");
+                            in.close();
+                            out.close();
                             link.close();
                             running = false;
                         }
