@@ -11,42 +11,45 @@ This project is a server-client application designed to manage and interact with
 
 ## Server Responses
 
-- `ttf` -> **Timetable Full**: Indicates that no more classes can be added because the schedule is full.
-- `cs` -> **Class Added**: Confirms that the requested class has been added to the schedule.
+# Add Class
+- `ol` -> **Class overlaps**
+- `im` -> **Invalid Module**
+- `ir` -> **Invaild Room**
+- `ca` -> **Class added**
+- `ttf` -> **TimeTable full**
 
-## Message Protocol Layout
+# Remove class
+- `nsc` -> **No scheduled class**
+- `cr + details` -> **Class removed + details about**
+- `cnf` -> **No class found**
 
-Messages adhere to a structured format to facilitate clear and efficient communication between the client and server. The general layout is:
+# Display Schedule
+- `cp` -> **Class printed**
+- `cnf` -> **No class found**
 
-- **(Action)** [**(Time) (Day) (Room)**] - The additional parameters are included if the action is `ac` (add class) or `rc` (remove class).
+# Stop
+- `TERMINATE` -> **Terminate**
+
 
 ### Client to Server Message Format
 
 1. **Add Class (`ac`)**: Requires additional parameters.
    - Format: `ac <ModuleCode> <StartTime-EndTime> <Day> <Room>`
-   - Example: `ac CS4076 09:00-10:00 monday CS4005B`
-2. **Remove Class (`rc`)**: Requires the module code parameter only.
+   - Example: `ac CS4076 09:00-10:00 monday CS-4005B`
+2. **Remove Class (`rc`)**: Requires additional parameters.
    - Format: `rc <ModuleCode> <StartTime-EndTime> <Day> <Room>`
-3. **Display Schedule (`ds`)**: No additional parameters required.
-4. **Terminate Connection (`st`)**: No additional parameters required.
+   - Example: `rm CS4076 09:00-10:00 monday CS-4005B`
+3. **Display Schedule (`ds`)**: Requires the module code for schedule.
+   - Format: `ds <ModuleCode>`
+   - Example: `ds CS4076`
+5. **Terminate Connection (`st`)**: No additional parameters required.
 
-### Server to Client Responses
-
-- **Timetable Full (`ttf`)**: Indicates no more classes can be added.
-- **Class Added (`cs`)**: Confirms a class has been added to the schedule.
-- **Class overlaps (`ol`)**: Class overlaps with another class in the schedule.
 
 ### Detailed Explanation
 
 - For the `ac` action, clients must specify the module code, time, day, and room where the class is to be added. This detailed information is essential for scheduling the class correctly.
 - For the `rc` action, clients must specify the module code, time, day, and room where the class is to be added. This detailed information is essential for removing the correct class.
-- Actions like `ds` (display schedule) and `st` (stop) do not require additional information beyond the initial action command.
-
-## Example Messages from Client to Server
-
-- To add a class:  
-  `ac CS4076 09:00-10:00 monday CS4005B`
-- To stop (close the connection):  
-  `st`
+- For the `ds` action, clients must specify the module code
+- `st` (stop) do not require additional information beyond the initial action command.
 
 This structured approach to message formatting ensures a straightforward and effective interaction between the client and server, facilitating easy schedule management.
