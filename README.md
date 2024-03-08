@@ -11,23 +11,23 @@ This project is a server-client application designed to manage and interact with
 
 ## Server Responses
 
-# Add Class
+### Add Class
 - `ol` -> **Class overlaps**
 - `im` -> **Invalid Module**
 - `ir` -> **Invaild Room**
 - `ca` -> **Class added**
 - `ttf` -> **TimeTable full**
 
-# Remove class
+### Remove class
 - `nsc` -> **No scheduled class**
 - `cr + details` -> **Class removed + details about**
 - `cnf` -> **No class found**
 
-# Display Schedule
+### Display Schedule
 - `cp` -> **Class printed**
 - `cnf` -> **No class found**
 
-# Stop
+### Stop
 - `TERMINATE` -> **Terminate**
 
 
