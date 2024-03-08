@@ -80,9 +80,9 @@ public class CS4076P1Server {
                     }
 
                     switch (action) {
-                        case "ac" -> out.println(UtilityFunctions.addClass(details, currentModules));
-                        case "rc" -> out.println(UtilityFunctions.removeClass(details, currentModules));
-                        case "ds" -> out.println(UtilityFunctions.displaySchedule(details, currentModules));
+                        case "ac" -> out.println(ActionHandler.addClass(details, currentModules));
+                        case "rc" -> out.println(ActionHandler.removeClass(details, currentModules));
+                        case "ds" -> out.println(ActionHandler.displaySchedule(details, currentModules));
                         case "st" -> {
                             System.out.println("TERMINATE");
                             out.println("TERMINATE");
