@@ -73,9 +73,7 @@ public class showTimetable {
 
 //        Utillity.qForTermination(scene); //Q to terminate
 
-        stage.setOnCloseRequest((WindowEvent we) -> {
-            Utillity.quitApp(in, out);
-        });
+        stage.setOnCloseRequest((WindowEvent we) -> Utillity.quitApp(in, out));
 
         // Adding components to the GridPane
         layout.getChildren().addAll(moduleLabel, userInputModule, root2, displayText);

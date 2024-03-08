@@ -1,6 +1,5 @@
 package seanie.mark.cs4076p1client;
 
-import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -16,7 +15,7 @@ import java.io.PrintWriter;
 public class addModule {
 
     private final Stage stage;
-    private final Runnable returnToMain; // Callback to switch back to the main scene
+    private final Runnable returnToMain;
 
     private final BufferedReader in;
     private final PrintWriter out;
@@ -30,8 +29,6 @@ public class addModule {
     }
 
     public void initScreen() {
-        //Application logic class
-
 
         Label moduleLabel = new Label("Module:");
         TextField userInputModule = new TextField();
@@ -57,6 +54,7 @@ public class addModule {
 
         Label roomLabel = new Label("Room:");
         TextField userInputRoom = new TextField();
+
         //TODO: Fix this , think its fine now check later
         HBox root2 = new HBox();
         root2.setSpacing(10);
@@ -130,33 +128,19 @@ public class addModule {
             }
         });
 
-
         VBox root = new VBox(10);
         root.setPadding(new Insets(10, 10, 10, 10));                                                                // dayLabel, userInputDay removed from below
         root.getChildren().addAll(root2, moduleLabel, userInputModule, startTimeLabel, selectStartTime, endTimeLabel, selectEndTime, dayLabel, dayMenu, roomLabel, userInputRoom, submitButton, displayText);
 
-        stage.setOnCloseRequest((WindowEvent we) -> {
-            Utillity.quitApp(in, out);
-        });
-
-
+        stage.setOnCloseRequest((WindowEvent we) -> Utillity.quitApp(in, out));
 
         Scene scene;
         scene = new Scene(root, 400, 400);
-
-
-        // Keyboard shortcuts
-//        Utillity.qForTermination(scene);
         Utillity.enterForSubmisson(scene,submitButton);
 
-        // Set the scene to the stage and show it
         stage.setScene(scene);
         stage.setTitle("Add Module");
         stage.show();
-    }
-
-    public void quitApp() {
-        Platform.exit();
     }
 }
 

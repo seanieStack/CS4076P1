@@ -13,14 +13,6 @@ public class Utillity {
     //TODO: Merge Utillity and VerifyInput
 
 
-//    public static void qForTermination(Scene scene) {
-//        scene.setOnKeyPressed(event -> {
-//            if (event.getCode() == KeyCode.Q)  { // Reminder : KeyCode is case agnostic
-//                quitApp();  // Terminate app
-//            }
-//        });
-//    }
-
     public static void quitApp(BufferedReader in, PrintWriter out) {
         try{
             out.println("st");
@@ -59,10 +51,6 @@ public class Utillity {
         // Split the string based on "><" pattern
         return trimmedInput.split("><");
     }
-    
-    public static String populateModule (String payload) {
-        return (splitPayload(payload)[1] + " , " + splitPayload(payload)[3]); // Forms formatted String with module info 
-    }
 
     public static String[] splitTime(String timePart) {
         return timePart.split("-"); // Splits time into start time [0] and end time [1]
@@ -81,7 +69,7 @@ public class Utillity {
         int nodeY = 0;
 
         for (int i = 0; i < times.length; i++) {
-            if (bothTimes[0].equals(times[i])) { // Uses start time for comaprison  
+            if (bothTimes[0].equals(times[i])) { // Uses start time for comparison
                 nodeY = i + 1; // + 1 to skip header
                 break;
             }

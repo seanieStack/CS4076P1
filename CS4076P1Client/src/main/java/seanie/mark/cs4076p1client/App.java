@@ -1,7 +1,6 @@
 package seanie.mark.cs4076p1client;
 
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -13,9 +12,9 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.net.*;
-
-import java.io.IOException;
+import java.net.InetAddress;
+import java.net.Socket;
+import java.net.UnknownHostException;
 
 
 
@@ -29,11 +28,11 @@ public class App extends Application {
 
 
     @Override
-    public void start(Stage stage) throws IOException {
+    public void start(Stage stage){
 
         Socket link;
-        BufferedReader in = null;
-        PrintWriter out = null;
+        BufferedReader in;
+        PrintWriter out;
         try {
             link = new Socket(host, PORT);
             in = new BufferedReader(new InputStreamReader(link.getInputStream()));
@@ -60,7 +59,6 @@ public class App extends Application {
             //showTimetable.setonAction(event -> goToShowTimetable());
             Button customizeApplication = new Button("Option");
             Button quitApplication = new Button("Quit application");
-            Scene scene;
             quitApplication.setOnAction((event -> Utillity.quitApp(finalIn, finalOut) ));
 
 
@@ -71,20 +69,7 @@ public class App extends Application {
             stage.setTitle("Welcome Screen");
             stage.show();
 
-            stage.setOnCloseRequest((WindowEvent we) -> {
-                Utillity.quitApp(finalIn, finalOut);
-            });
-
-            // Press Q to terminate
-            /*
-             scene.setOnKeyPressed(event -> {
-             if (event.getCode()  ==  KeyCode.Q ) {
-             quitApplication();
-             }});
-             }
-             */
-
-//            Utillity.qForTermination(mainScene);
+            stage.setOnCloseRequest((WindowEvent we) -> Utillity.quitApp(finalIn, finalOut));
 
         }
         catch (IOException e){
@@ -93,9 +78,6 @@ public class App extends Application {
         }
 
 
-    }
-    public void quitApp() {
-        Platform.exit();
     }
 
     public  void returnHome () {
