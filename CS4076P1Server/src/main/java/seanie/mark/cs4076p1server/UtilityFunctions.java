@@ -1,5 +1,8 @@
 package seanie.mark.cs4076p1server;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.*;
 
 public class UtilityFunctions {
@@ -10,26 +13,28 @@ public class UtilityFunctions {
         return Integer.parseInt(temp);
     }
 
-    static boolean checkOverlap(String time, String day, List<Module> currentModules){
-        //get all the timetable entries for the current modules
-        List<TimetableEntry> allEntries = new ArrayList<>();
-        for(Module m : currentModules){
-            allEntries.addAll(m.getTimetable());
-        }
+    public static boolean checkOverlap(String time, String day){
+        String[] timeSplit = time.split("-");
+        String startTime = timeSplit[0];
+        String endTime = timeSplit[1];
 
-        //check if the new entry overlaps with any of the existing entries
-        for(TimetableEntry m : allEntries){
-            if(m.getDay().equals(day)){
-                String[] timeSplit = time.split("-");
-                int startTime1 = stringTimeToIntTime(timeSplit[0]);
-                int endTime1 = stringTimeToIntTime(timeSplit[1]);
+        String sql = "SELECT COUNT(*) AS overlap_count FROM timetableentries WHERE day = ? AND ((? < end_time AND ? > start_time) OR (? < end_time AND ? > start_time))";
 
-                int startTime2 = stringTimeToIntTime(m.getStartTime());
-                int endTime2 = stringTimeToIntTime(m.getEndTime());
+        try (Connection con = DatabaseCon.getConnection();
+                PreparedStatement statement = con.prepareStatement(sql)) {
+            statement.setString(1, day);
+            statement.setString(2, startTime);
+            statement.setString(3, endTime);
+            statement.setString(4, endTime);
+            statement.setString(5, startTime);
 
-                return endTime1 > startTime2 && startTime1 < endTime2;
-
+            ResultSet rs = statement.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("overlap_count") > 0;
             }
+        }
+        catch (Exception e) {
+            System.out.println("Error checking for overlapping timetable entries");
         }
         return false;
     }
@@ -77,4 +82,123 @@ public class UtilityFunctions {
         return campusBuildings.contains(prefix);
     }
 
+    public static boolean moduleInDB(String moduleCode) {
+        String sql = "SELECT module_code FROM modules";
+        try(Connection con = DatabaseCon.getConnection();
+            PreparedStatement statement = con.prepareStatement(sql)){
+
+            ResultSet rs = statement.executeQuery();
+            while(rs.next()){
+                if(rs.getString("module_code").equals(moduleCode)){
+                    return true;
+                }
+            }
+            return false;
+        }
+        catch(Exception e) {
+            System.out.println("Error checking if module is in database");
+            return false;
+        }
+    }
+
+    public static void addTimetableEntryToDB(String moduleCode, String time, String day, String room) {
+        //convert time in format 00:00-00:00 to startTime 00:00 and end time 00:00
+        String[] times = time.split("-");
+        String startTime = times[0];
+        String endTime = times[1];
+
+
+        String sql = "INSERT INTO timetableentries(module_code, start_time, end_time, day, room) VALUES(?, ?, ?, ?, ?)";
+        try (Connection con = DatabaseCon.getConnection();
+             PreparedStatement statement = con.prepareStatement(sql)) {
+
+            statement.setString(1, moduleCode);
+            statement.setString(2, startTime);
+            statement.setString(3, endTime);
+            statement.setString(4, day);
+            statement.setString(5, room);
+
+            statement.executeUpdate();
+        } catch (Exception e) {
+            //System.out.println("Error adding timetable entry to database");
+            e.printStackTrace();
+        }
+    }
+
+    public static void addModuleToDB(String moduleCode) {
+        String sql = "INSERT INTO modules(module_code) VALUES(?)";
+        try (Connection con = DatabaseCon.getConnection();
+             PreparedStatement statement = con.prepareStatement(sql)) {
+
+            statement.setString(1, moduleCode);
+
+            statement.executeUpdate();
+        } catch (Exception e) {
+            //System.out.println("Error adding module to database");
+            e.printStackTrace();
+        }
+    }
+
+    public static int getNumberOfModules() {
+        String sql = "SELECT COUNT(*) FROM modules";
+        try(Connection con = DatabaseCon.getConnection();
+            PreparedStatement statement = con.prepareStatement(sql)){
+
+            ResultSet rs = statement.executeQuery();
+            rs.next();
+            return rs.getInt(1);
+        }
+        catch(Exception e) {
+            System.out.println("Error getting number of modules");
+            return -1;
+        }
+    }
+
+    public static String removeTimetableEntryFromDB(String moduleCode, String time, String day, String room) {
+        String[] times = time.split("-");
+        String startTime = times[0];
+        String endTime = times[1];
+
+        String sql = "DELETE FROM timetableentries WHERE module_code = ? AND start_time = ? AND end_time = ? AND day = ? AND room = ?";
+        try (Connection con = DatabaseCon.getConnection();
+             PreparedStatement statement = con.prepareStatement(sql)) {
+
+            statement.setString(1, moduleCode);
+            statement.setString(2, startTime);
+            statement.setString(3, endTime);
+            statement.setString(4, day);
+            statement.setString(5, room);
+
+            if(statement.executeUpdate() > 0){
+                return "cr" + " " + startTime + "-" + endTime + " " + day + " " + room;
+            }
+            else{
+                return "nsc";
+            }
+        } catch (Exception e) {
+            System.out.println("Error removing timetable entry from database");
+            return "error";
+        }
+    }
+
+    public static String displayModuleTimetable(String moduleCode) {
+        String sql = "SELECT start_time, end_time, day, room FROM timetableentries WHERE module_code = ?";
+        try(Connection con = DatabaseCon.getConnection();
+            PreparedStatement statement = con.prepareStatement(sql)){
+
+            statement.setString(1, moduleCode);
+
+            ResultSet rs = statement.executeQuery();
+            StringBuilder timetable = new StringBuilder();
+            while(rs.next()){
+                timetable.append(rs.getString("start_time")).append("-").append(rs.getString("end_time")).append(" ").append(rs.getString("day")).append(" ").append(rs.getString("room")).append("\n");
+            }
+            System.out.println(timetable);
+            return "cp";
+        }
+        catch(Exception e) {
+            System.out.println("Error displaying module timetable");
+            return "error";
+        }
+    }
 }

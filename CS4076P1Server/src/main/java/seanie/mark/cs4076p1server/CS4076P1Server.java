@@ -35,7 +35,8 @@ public class CS4076P1Server {
 
     private static ServerSocket servSock;
     private static final int PORT = 6558;
-    
+
+
     public static void main(String[] args) {
 
         try{
@@ -52,11 +53,9 @@ public class CS4076P1Server {
     }
     private static void run(){
         Socket link;
-        
+
         try{
             link = servSock.accept();
-
-            List<Module> currentModules = new ArrayList<>();
 
             BufferedReader in = new BufferedReader(new InputStreamReader(link.getInputStream()));
             PrintWriter out = new PrintWriter(link.getOutputStream(), true);
@@ -80,9 +79,9 @@ public class CS4076P1Server {
                     }
 
                     switch (action) {
-                        case "ac" -> out.println(ActionHandler.addClass(details, currentModules));
-                        case "rc" -> out.println(ActionHandler.removeClass(details, currentModules));
-                        case "ds" -> out.println(ActionHandler.displaySchedule(details, currentModules));
+                        case "ac" -> out.println(ActionHandler.addClass(details));
+                        case "rc" -> out.println(ActionHandler.removeClass(details));
+                        case "ds" -> out.println(ActionHandler.displaySchedule(details));
                         case "st" -> {
                             System.out.println("TERMINATE");
                             out.println("TERMINATE");
