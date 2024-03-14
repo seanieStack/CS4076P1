@@ -5,18 +5,22 @@
      -fx-font-family: Arial;
      -fx-font-size: 10pt;
  }
-
+.layout{
+-fx-background-image: url('UL_LOGO.png');
+    -fx-background-size: contain;
+    -fx-background-repeat: no-repeat;
+}
  .label {
      -fx-font-weight: bold;
  }
 
- .dialog-pane . button { /* dialog-pane options are currently unused , Keeping them here for now incase we need them */
-    -fx font-family: Arial;
-    -fx font-size: 10pt;
- }
+ /* dialog-pane options are currently unused , Keeping them here for now incase we need them */
+  .dialog-pane .button {
+    -fx-font-family: Arial;
+    -fx-font-size: 10pt;
+}
 
- .dialog-pane.label {
-    -fx font-family: Arial;
-     -fx font-size: 10pt;
- }
-
+.dialog-pane .label {
+    -fx-font-family: Arial;
+    -fx-font-size: 10pt;
+}
