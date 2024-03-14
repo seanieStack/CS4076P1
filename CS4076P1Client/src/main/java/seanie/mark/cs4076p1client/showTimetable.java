@@ -4,6 +4,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
@@ -47,7 +48,7 @@ public class showTimetable {
 
         HBox root2 = new HBox();
         root2.setSpacing(10);
-        utton fullTimetable = new Button("Display full timetable "); //TODO: Fix UI so its better , review with seanie
+        Button fullTimetable = new Button("Display full timetable "); //TODO: Fix UI so its better , review with seanie
         Button moduleTimetable = new Button("Display module timetable");
         Button submitButton = new Button("Submit");
         Button backButton = new Button("Return");

@@ -154,6 +154,23 @@ public class UtilityFunctions {
         }
     }
 
+    public static boolean checkIfModulesHasNoRemainingClasses(String moduleCode){
+        String sql = "SELECT COUNT(*) FROM timetableentries WHERE module_code = ?";
+        try(Connection con = DatabaseCon.getConnection();
+            PreparedStatement statement = con.prepareStatement(sql)){
+
+            statement.setString(1, moduleCode);
+
+            ResultSet rs = statement.executeQuery();
+            rs.next();
+            return rs.getInt(1) == 0;
+        }
+        catch(Exception e) {
+            System.out.println("Error checking if module has no remaining classes");
+            return false;
+        }
+    }
+
     public static String removeTimetableEntryFromDB(String moduleCode, String time, String day, String room) {
         String[] times = time.split("-");
         String startTime = times[0];
@@ -170,6 +187,14 @@ public class UtilityFunctions {
             statement.setString(5, room);
 
             if(statement.executeUpdate() > 0){
+                boolean noRemainingClasses = checkIfModulesHasNoRemainingClasses(moduleCode);
+                if(noRemainingClasses){
+                    String sql2 = "DELETE FROM modules WHERE module_code = ?";
+                    try (PreparedStatement statement2 = con.prepareStatement(sql2)) {
+                        statement2.setString(1, moduleCode);
+                        statement2.executeUpdate();
+                    }
+                }
                 return "cr" + " " + startTime + "-" + endTime + " " + day + " " + room;
             }
             else{
