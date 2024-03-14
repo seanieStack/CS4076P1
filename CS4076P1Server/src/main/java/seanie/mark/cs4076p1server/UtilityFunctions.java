@@ -6,12 +6,6 @@ import java.sql.ResultSet;
 import java.util.*;
 
 public class UtilityFunctions {
-    static int stringTimeToIntTime(String time){
-        String temp = time.substring(0, 2);
-        temp += time.substring(3);
-
-        return Integer.parseInt(temp);
-    }
 
     public static boolean checkOverlap(String time, String day){
         String[] timeSplit = time.split("-");
@@ -120,8 +114,7 @@ public class UtilityFunctions {
 
             statement.executeUpdate();
         } catch (Exception e) {
-            //System.out.println("Error adding timetable entry to database");
-            e.printStackTrace();
+            System.out.println("Error adding timetable entry to database");
         }
     }
 
@@ -134,8 +127,7 @@ public class UtilityFunctions {
 
             statement.executeUpdate();
         } catch (Exception e) {
-            //System.out.println("Error adding module to database");
-            e.printStackTrace();
+            System.out.println("Error adding module to database");
         }
     }
 
