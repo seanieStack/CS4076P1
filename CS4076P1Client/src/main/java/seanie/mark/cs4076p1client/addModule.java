@@ -8,6 +8,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import javafx.scene.control.DialogPane; //Unused for now , releated to font issue 
 
 import java.io.BufferedReader;
 import java.io.PrintWriter;
@@ -109,19 +110,52 @@ public class addModule {
                 switch (response) {
                     case "ca":
                         // change to error pop ups
-                        displayText.setText("Module Added");
+                        displayText.setText("Module Added"); // Made redundant , left in for now bc of font issue  
+                        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                        alert.setTitle("Module Added !");
+                        alert.setHeaderText(null);    
+                        alert.setContentText("Timetable is now updated to reflect " + userModule +" being added ");
+                         /** This might fix the font issue ? 
+                        DialogPane  addedPane = alert.getDialogPane();
+                        addedPane.getStylesheets().add(getClass().getResource("/alert-styles.css").toExternalForm());
+                        addedPane.getStyleClass().add("Dialog");
+                        **/
                         break;
                     case "ol":
                         displayText.setText("Module Overlaps");
+                        Alert overlapAlert = new Alert(Alert.AlertType.ERROR);
+                        overlapAlert.setTitle("Error adding Module : " + userModule);
+                        overlapAlert.setHeaderText(null);
+                        overlapAlert.setContentText("Module : " + userModule +" already exists and was not added  ");
+                        overlapAlert.show();
+
                         break;
                     case "ttf":
                         displayText.setText("Timetable Full");
+                        Alert ttFullAlert = new Alert(Alert.AlertType.ERROR);
+                        ttFullAlert.setTitle("Error adding Module : " + userModule);
+                        ttFullAlert.setHeaderText(null);
+                        ttFullAlert.setContentText("Module : " + userModule +" could not be added , A student can not exceed 5 modules   ");
+                        ttFullAlert.show();
+
                         break;
                     case "im":
                         displayText.setText("Invalid Module");
+                        Alert wrongFormatAlert = new Alert(Alert.AlertType.ERROR);
+                        wrongFormatAlert.setTitle("Error adding Module : " + userModule);
+                        wrongFormatAlert.setHeaderText(null);
+                        wrongFormatAlert.setContentText("Module : " + userModule + " does not follow the proper module formatting e.g. CS4076");
+                        wrongFormatAlert.show();
+
                         break;
                     default:
                         displayText.setText("Error Adding Module");
+                        Alert unknownErrorAlert = new Alert(Alert.AlertType.ERROR);
+                        unknownErrorAlert.setTitle("Error adding Module : " + userModule);
+                        unknownErrorAlert.setHeaderText(null);
+                        unknownErrorAlert.setContentText("An unknown error  ");
+                        unknownErrorAlert.show();
+
                 }
             } catch (Exception ex){
                 displayText.setText("Error Adding Module");
