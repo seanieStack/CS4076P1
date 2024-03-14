@@ -53,3 +53,27 @@ This project is a server-client application designed to manage and interact with
 - `st` (stop) do not require additional information beyond the initial action command.
 
 This structured approach to message formatting ensures a straightforward and effective interaction between the client and server, facilitating easy schedule management.
+
+## Database Setup
+
+For testing data base should be setup with the name `cs4076p1` hosted on localhost at port `3306`.  
+There should be a user `dev` with a password set to `dev`.  
+
+The code for setting up tables correctly should be:
+
+```MySQL
+CREATE TABLE Modules ( 
+    module_code VARCHAR(255) PRIMARY KEY
+);
+
+CREATE TABLE TimetableEntries (
+    entry_id INT AUTO_INCREMENT PRIMARY KEY,
+    module_code VARCHAR(255),
+    start_time TIME,
+    end_time TIME,
+    day VARCHAR(255),
+    room VARCHAR(255),
+    FOREIGN KEY (module_code) REFERENCES Modules(module_code)
+);
+```
+
