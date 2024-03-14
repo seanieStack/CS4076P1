@@ -8,6 +8,14 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
+import javafx.scene.layout.StackPane;
+import javafx.scene.image.Image;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.layout.BackgroundSize;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -45,6 +53,13 @@ public class App extends Application {
 
 
             VBox layout = new VBox(10); // Use a VBox layout with spacing of 10
+            layout.getStyleClass().add("layout");
+            StackPane root = new StackPane();
+            Image image = new Image("file:src/main/resources/UL_LOGO.png");
+            BackgroundImage backgroundImage = new BackgroundImage(image, BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
+            layout.setBackground(new Background(backgroundImage));
+
+            
             Label welcomelabel = new Label("Please select an option");
 
             Button addModule = new Button("Add Module");
@@ -65,6 +80,7 @@ public class App extends Application {
             layout.getChildren().addAll(welcomelabel, addModule, removeModule, showTimetable, customizeApplication, quitApplication); // Add the button to the layout
 
             mainScene = new Scene(layout, 400, 400);
+            mainScene.getStylesheets().add(getClass().getResource("/styles.css").toExternalForm());
             stage.setScene(mainScene); // Set the scene on the stage
             stage.setTitle("Welcome Screen");
             stage.show();
