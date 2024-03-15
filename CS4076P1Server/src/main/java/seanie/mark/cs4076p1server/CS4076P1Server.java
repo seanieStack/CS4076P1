@@ -60,6 +60,8 @@ public class CS4076P1Server {
             BufferedReader in = new BufferedReader(new InputStreamReader(link.getInputStream()));
             PrintWriter out = new PrintWriter(link.getOutputStream(), true);
 
+            List<Module> currentModules = new ArrayList<>();
+            
             boolean running = true;
 
             while(running) {
@@ -73,7 +75,7 @@ public class CS4076P1Server {
                     String action = message.substring(0, 2);
                     String details = message.substring(2);
 
-                    List<String> possibleActions = Arrays.asList("ac", "rc", "ds", "st");
+                    List<String> possibleActions = Arrays.asList("ac", "rc", "ds", "st","te");
                     if (!possibleActions.contains(action)) {
                         throw new IncorrectActionException("Incorrect action\n");
                     }
@@ -82,6 +84,7 @@ public class CS4076P1Server {
                         case "ac" -> out.println(ActionHandler.addClass(details));
                         case "rc" -> out.println(ActionHandler.removeClass(details));
                         case "ds" -> out.println(ActionHandler.displaySchedule(details));
+                        case "te" -> out.println(ActionHandler.getTimetableEntry(details,currentModules));
                         case "st" -> {
                             System.out.println("TERMINATE");
                             out.println("TERMINATE");
