@@ -21,5 +21,21 @@ public class VerifyInput {
 
          return hours <= 3;
      }
+
+    public static boolean isValidModule(String module) {
+        // Check if the module string length is exactly 6
+        if (module.length() != 6) {
+            return false;
+        }
+
+        // Check the first two characters for letters
+        for (int i = 0; i < 2; i++) {
+            char ch = module.charAt(i);
+            if (!Character.isLetter(ch)) {
+                return false;
+            }
+        }
+        return true ;
+    }
 }
 
