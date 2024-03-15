@@ -9,6 +9,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import javafx.scene.control.DialogPane;
 
 import java.io.BufferedReader;
 import java.io.PrintWriter;
@@ -88,6 +89,9 @@ public class removeModule {
                 alert.setTitle("Start / End time : An error has occurred");
                 alert.setHeaderText("Duplicate time values detected ");
                 alert.setContentText("Start and end time can not have the same value !");
+                DialogPane dialogPaneDT = alert.getDialogPane();
+                dialogPaneDT.getStylesheets().add(getClass().getResource("/styles.css").toExternalForm());
+                dialogPaneDT.getStyleClass().add("my-dialog");
                 alert.show();
             } else if (!validLength) {
 
@@ -95,6 +99,9 @@ public class removeModule {
                 alert.setTitle("Start / End time : An error has occurred");
                 alert.setHeaderText("Session length exceeds 3 hours");
                 alert.setContentText("Module sessions can not exceed 3 hours !");
+                DialogPane dialogPaneVl = alert.getDialogPane();
+                dialogPaneVl.getStylesheets().add(getClass().getResource("/styles.css").toExternalForm());
+                dialogPaneVl.getStyleClass().add("my-dialog");
                 alert.show();
             }
 
@@ -110,6 +117,9 @@ public class removeModule {
                     Alert nonValidAlert = new Alert(Alert.AlertType.ERROR);
                     nonValidAlert.setTitle("Submission error : Invalid Module");
                     nonValidAlert.setContentText("Module : " + userModule + " does not follow the required module code formatting e.g CS4076");
+                    DialogPane dialogPaneVl = nonValidAlert.getDialogPane();
+                    dialogPaneVl.getStylesheets().add(getClass().getResource("/styles.css").toExternalForm());
+                    dialogPaneVl.getStyleClass().add("my-dialog");
                     nonValidAlert.show();
                 } else {
                     switch (response) {
@@ -118,6 +128,9 @@ public class removeModule {
                             Alert nscAlert = new Alert(Alert.AlertType.ERROR);
                             nscAlert.setTitle("Module removal error : ");
                             nscAlert.setContentText("Module : " + userModule + "could not be removed as this module has not scheduled class's");
+                            DialogPane dialogPaneNsc = nscAlert.getDialogPane();
+                            dialogPaneNsc.getStylesheets().add(getClass().getResource("/styles.css").toExternalForm());
+                            dialogPaneNsc.getStyleClass().add("my-dialog");
                             nscAlert.show();
                             break;
                         case "cnf":
@@ -125,6 +138,9 @@ public class removeModule {
                             Alert cnfAlert = new Alert(Alert.AlertType.ERROR);
                             cnfAlert.setTitle("Module removal error : ");
                             cnfAlert.setContentText("Module : " + userModule + " could not be removed as this module does not exist in the database ");
+                            DialogPane dialogPaneCnf = cnfAlert.getDialogPane();
+                            dialogPaneCnf.getStylesheets().add(getClass().getResource("/styles.css").toExternalForm());
+                            dialogPaneCnf.getStyleClass().add("my-dialog");
                             cnfAlert.show();
                             break;
                         case "cr":  //README says 'cr + details' , what details ? //TODO:Fix error ,seanie
@@ -132,6 +148,9 @@ public class removeModule {
                             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                             alert.setTitle("Module removed successfully");
                             alert.setContentText("Module : " + userModule + "removed successfully , return to see new updated timetable");
+                            DialogPane dialogPaneRs = alert.getDialogPane();
+                            dialogPaneRs.getStylesheets().add(getClass().getResource("/styles.css").toExternalForm());
+                            dialogPaneRs.getStyleClass().add("my-dialog");
                             alert.show();
                             break;
 
@@ -140,6 +159,9 @@ public class removeModule {
                             Alert unknownErrorAlert = new Alert(Alert.AlertType.ERROR);
                             unknownErrorAlert.setTitle("Error adding Module : " + userModule);
                             unknownErrorAlert.setContentText("An unknown error prevented " + userModule + "from being removed");
+                            DialogPane dialogPaneUe = unknownErrorAlert.getDialogPane();
+                            dialogPaneUe.getStylesheets().add(getClass().getResource("/styles.css").toExternalForm());
+                            dialogPaneUe.getStyleClass().add("my-dialog");
                             unknownErrorAlert.show();
                     }
                 }
@@ -154,15 +176,14 @@ public class removeModule {
         root.getChildren().addAll(root2, moduleLabel, userInputModule, startTimeLabel, selectStartTime, endTimeLabel, selectEndTime, dayLabel, dayMenu, roomLabel, userInputRoom, submitButton, displayText);
 
         Scene scene;
-        scene = new Scene(root, 400, 400);
+        scene = new Scene(root, 400, 475);
         scene.getStylesheets().add(getClass().getResource("/styles.css").toExternalForm()); //Added to fix Mac font issue
 
 
         stage.setOnCloseRequest((WindowEvent we) -> Utillity.quitApp(in, out));
 
 
-        // Keyboard shortcuts
-//        Utillity.qForTermination(scene);
+
         Utillity.enterForSubmisson(scene,submitButton);
 
         // Set the scene to the stage and show it
