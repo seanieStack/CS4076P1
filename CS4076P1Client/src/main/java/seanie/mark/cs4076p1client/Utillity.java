@@ -9,9 +9,7 @@ import java.io.BufferedReader;
 import java.io.PrintWriter;
 
 public class Utillity {
-    //TODO: Implement method for background screen and add to all scenes
-    //TODO: Merge Utillity and VerifyInput
-
+    
 
     public static void quitApp(BufferedReader in, PrintWriter out) {
         try{
@@ -26,7 +24,7 @@ public class Utillity {
         }
     }
 
-    public static void enterForSubmisson(Scene scene, Button button) { //@param scene is used for setOnKeyPressed
+    public static void enterForSubmisson(Scene scene, Button button) { 
         scene.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
                 button.fire(); // Trigger setOnAction function
@@ -46,10 +44,7 @@ public class Utillity {
      //Payload will take the format <CS4096><14:00-15:00><Thursday><KGB-10>
     public static String[] splitPayload ( String payload) { 
         //Split spring into parts : Module code [0] , Time[1] , Day [2] and Room [3]
-        String trimmedInput = payload.substring(1, payload.length() - 1);
-
-        // Split the string based on "><" pattern
-        return trimmedInput.split("><");
+         return payload.split(" ");
     }
 
     public static String[] splitTime(String timePart) {
