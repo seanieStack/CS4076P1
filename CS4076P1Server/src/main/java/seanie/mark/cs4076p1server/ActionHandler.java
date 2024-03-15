@@ -81,4 +81,25 @@ public class ActionHandler {
             return "cnf";
         }
     }
+
+    static String getTimetableEntry(String details, List<Module> currentModules) {
+        String currentEntrys = " ";
+
+        String[] parts = details.strip().split(" ");
+        String moduleCode = parts[0];
+        List<String> currentModulesNames = new ArrayList<>();
+        for (Module m : currentModules) {
+            if (m.getModuleCode().equals(moduleCode)) {
+                List<TimetableEntry> timetable = m.getTimetable();
+                for (TimetableEntry t : timetable) {
+                    for (int i = 0; i < timetable.size(); i++) {
+                        System.out.println(t.getTime() + " " + t.getDay() + " " + t.getRoom());
+                        return (moduleCode + " " + t.getTime() + " " + t.getDay() + " " + t.getRoom());
+                    }
+                }
+
+            }
+
+        }
+        return currentEntrys;
 }
