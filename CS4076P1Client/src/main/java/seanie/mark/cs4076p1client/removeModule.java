@@ -155,6 +155,8 @@ public class removeModule {
 
         Scene scene;
         scene = new Scene(root, 400, 400);
+        scene.getStylesheets().add(getClass().getResource("/styles.css").toExternalForm()); //Added to fix Mac font issue
+
 
         stage.setOnCloseRequest((WindowEvent we) -> Utillity.quitApp(in, out));
 
