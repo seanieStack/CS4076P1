@@ -57,7 +57,7 @@ public class removeModule {
 
         Label roomLabel = new Label("Room:");
         TextField userInputRoom = new TextField();
-        //TODO: Fix this , think its fine now check later
+        
         HBox root2 = new HBox();
         root2.setSpacing(10);
         Button submitButton = new Button("Submit");
@@ -78,7 +78,6 @@ public class removeModule {
             String userRoom = userInputRoom.getText();
 
             // Boolean logic for throwing errors
-            //TODO: check if this can be done better
             boolean differentTime = VerifyInput.isDifferentTime(startTime, endTime);
             boolean validLength = VerifyInput.isValidSessionLength(startTime, endTime);
 
@@ -143,7 +142,7 @@ public class removeModule {
                             dialogPaneCnf.getStyleClass().add("my-dialog");
                             cnfAlert.show();
                             break;
-                        case "cr":  //README says 'cr + details' , what details ? //TODO:Fix error ,seanie
+                        case "cr": 
                             displayText.setText("Module removed successfully ");
                             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                             alert.setTitle("Module removed successfully");
