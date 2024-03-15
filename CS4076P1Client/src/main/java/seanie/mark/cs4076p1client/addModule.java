@@ -36,20 +36,20 @@ public class addModule {
 
         Label startTimeLabel = new Label("Start Time:");
         ChoiceBox<String> selectStartTime = new ChoiceBox<>();
-        selectStartTime.getItems().addAll("09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00");
+        selectStartTime.getItems().addAll(Utillity.getTimes());
         selectStartTime.setValue("09:00"); // Default start time
 
 
         Label endTimeLabel = new Label("End Time:");
 
         ChoiceBox<String> selectEndTime = new ChoiceBox<>();
-        selectEndTime.getItems().addAll("09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00");
+        selectEndTime.getItems().addAll(Utillity.getTimes());
         selectEndTime.setValue("10:00"); //Default end time
 
 
         Label dayLabel = new Label("Day : ");
         ChoiceBox<String> dayMenu = new ChoiceBox<>();
-        dayMenu.getItems().addAll("Monday", "Tuesday", "Wednesday", "Thursday", "Friday");
+        dayMenu.getItems().addAll(Utillity.getDays());
         dayMenu.setValue("Monday"); //Default value
 
 
@@ -88,6 +88,9 @@ public class addModule {
                 alert.setTitle("Start / End time : An error has occurred");
                 alert.setHeaderText("Duplicate time values detected ");
                 alert.setContentText("Start and end time can not have the same value !");
+                DialogPane dialogPaneDT = alert.getDialogPane();
+                dialogPaneDT.getStylesheets().add(getClass().getResource("/styles.css").toExternalForm());
+                dialogPaneDT.getStyleClass().add("my-dialog");
                 alert.show();
             } else if (!validLength) {
 
@@ -95,6 +98,9 @@ public class addModule {
                 alert.setTitle("Start / End time : An error has occurred");
                 alert.setHeaderText("Session length exceeds 3 hours");
                 alert.setContentText("Module sessions can not exceed 3 hours !");
+                DialogPane dialogPaneVl = alert.getDialogPane();
+                dialogPaneVl.getStylesheets().add(getClass().getResource("/styles.css").toExternalForm());
+                dialogPaneVl.getStyleClass().add("my-dialog");
                 alert.show();
             }
 
@@ -115,11 +121,10 @@ public class addModule {
                         alert.setTitle("Module Added !");
                         alert.setHeaderText(null);    
                         alert.setContentText("Timetable is now updated to reflect " + userModule +" being added ");
-                         /** This might fix the font issue ? 
-                        DialogPane  addedPane = alert.getDialogPane();
-                        addedPane.getStylesheets().add(getClass().getResource("/alert-styles.css").toExternalForm());
-                        addedPane.getStyleClass().add("Dialog");
-                        **/
+                        DialogPane dialogPane = alert.getDialogPane();
+                        dialogPane.getStylesheets().add(getClass().getResource("/styles.css").toExternalForm());
+                        dialogPane.getStyleClass().add("my-dialog");
+                        alert.show();
                         break;
                     case "ol":
                         displayText.setText("Module Overlaps");
@@ -127,6 +132,9 @@ public class addModule {
                         overlapAlert.setTitle("Error adding Module : " + userModule);
                         overlapAlert.setHeaderText(null);
                         overlapAlert.setContentText("Module : " + userModule +" already exists and was not added  ");
+                        DialogPane dialogPaneOL = overlapAlert.getDialogPane();
+                        dialogPaneOL.getStylesheets().add(getClass().getResource("/styles.css").toExternalForm());
+                        dialogPaneOL.getStyleClass().add("my-dialog");
                         overlapAlert.show();
 
                         break;
@@ -136,6 +144,9 @@ public class addModule {
                         ttFullAlert.setTitle("Error adding Module : " + userModule);
                         ttFullAlert.setHeaderText(null);
                         ttFullAlert.setContentText("Module : " + userModule +" could not be added , A student can not exceed 5 modules   ");
+                        DialogPane dialogPanettf = ttFullAlert.getDialogPane();
+                        dialogPanettf.getStylesheets().add(getClass().getResource("/styles.css").toExternalForm());
+                        dialogPanettf.getStyleClass().add("my-dialog");
                         ttFullAlert.show();
 
                         break;
@@ -145,6 +156,9 @@ public class addModule {
                         wrongFormatAlert.setTitle("Error adding Module : " + userModule);
                         wrongFormatAlert.setHeaderText(null);
                         wrongFormatAlert.setContentText("Module : " + userModule + " does not follow the proper module formatting e.g. CS4076");
+                        DialogPane dialogPaneWf = wrongFormatAlert.getDialogPane();
+                        dialogPaneWf.getStylesheets().add(getClass().getResource("/styles.css").toExternalForm());
+                        dialogPaneWf.getStyleClass().add("my-dialog");
                         wrongFormatAlert.show();
 
                         break;
@@ -169,7 +183,8 @@ public class addModule {
         stage.setOnCloseRequest((WindowEvent we) -> Utillity.quitApp(in, out));
 
         Scene scene;
-        scene = new Scene(root, 400, 400);
+        scene = new Scene(root, 400, 475);
+        scene.getStylesheets().add(getClass().getResource("/styles.css").toExternalForm());
         Utillity.enterForSubmisson(scene,submitButton);
 
         stage.setScene(scene);
