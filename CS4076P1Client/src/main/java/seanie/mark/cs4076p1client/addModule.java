@@ -8,7 +8,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
-import javafx.scene.control.DialogPane; //Unused for now , releated to font issue 
+import javafx.scene.control.DialogPane; 
 
 import java.io.BufferedReader;
 import java.io.PrintWriter;
@@ -56,7 +56,7 @@ public class addModule {
         Label roomLabel = new Label("Room:");
         TextField userInputRoom = new TextField();
 
-        //TODO: Fix this , think its fine now check later
+       
         HBox root2 = new HBox();
         root2.setSpacing(10);
         Button submitButton = new Button("Submit");
@@ -116,7 +116,7 @@ public class addModule {
                 switch (response) {
                     case "ca":
                         // change to error pop ups
-                        displayText.setText("Module Added"); // Made redundant , left in for now bc of font issue  
+                        displayText.setText("Module Added"); 
                         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                         alert.setTitle("Module Added !");
                         alert.setHeaderText(null);    
@@ -177,7 +177,7 @@ public class addModule {
         });
 
         VBox root = new VBox(10);
-        root.setPadding(new Insets(10, 10, 10, 10));                                                                // dayLabel, userInputDay removed from below
+        root.setPadding(new Insets(10, 10, 10, 10));                                                               
         root.getChildren().addAll(root2, moduleLabel, userInputModule, startTimeLabel, selectStartTime, endTimeLabel, selectEndTime, dayLabel, dayMenu, roomLabel, userInputRoom, submitButton, displayText);
 
         stage.setOnCloseRequest((WindowEvent we) -> Utillity.quitApp(in, out));
