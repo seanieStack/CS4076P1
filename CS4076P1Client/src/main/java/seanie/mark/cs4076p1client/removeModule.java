@@ -37,20 +37,20 @@ public class removeModule {
 
         Label startTimeLabel = new Label("Start Time:");
         ChoiceBox<String> selectStartTime = new ChoiceBox<>();
-        selectStartTime.getItems().addAll("09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00");
+        selectStartTime.getItems().addAll(Utillity.getTimes());
         selectStartTime.setValue("09:00"); // Default start time
 
 
         Label endTimeLabel = new Label("End Time:");
 
         ChoiceBox<String> selectEndTime = new ChoiceBox<>();
-        selectEndTime.getItems().addAll("09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00");
+        selectEndTime.getItems().addAll(Utillity.getTimes());
         selectEndTime.setValue("10:00"); //Default end time
 
 
         Label dayLabel = new Label("Day : ");
         ChoiceBox<String> dayMenu = new ChoiceBox<>();
-        dayMenu.getItems().addAll("Monday", "Tuesday", "Wednesday", "Thursday", "Friday");
+        dayMenu.getItems().addAll(Utillity.getDays());
         dayMenu.setValue("Monday"); //Default value
 
 
@@ -102,22 +102,49 @@ public class removeModule {
 
             String response;
 
-            try{
+            try {
                 out.println(resultText);
-
                 response = in.readLine();
-
-                if(response.startsWith("cr")){
-                    displayText.setText("Class removed at " + response.substring(2));
-                } else if (response.equals("nsc")){
-                    displayText.setText("Class not found in timetable");
-                } else if (response.equals("cnf")){
-                    displayText.setText("Class not in timetable");
+                if (!VerifyInput.isValidModule(userModule)) {
+                    displayText.setText(userModule + ": is not a valid module");
+                    Alert nonValidAlert = new Alert(Alert.AlertType.ERROR);
+                    nonValidAlert.setTitle("Submission error : Invalid Module");
+                    nonValidAlert.setContentText("Module : " + userModule + " does not follow the required module code formatting e.g CS4076");
+                    nonValidAlert.show();
                 } else {
-                    displayText.setText("Error removing module " + response);
+                    switch (response) {
+                        case "nsc":
+                            displayText.setText("Error Removing Module");
+                            Alert nscAlert = new Alert(Alert.AlertType.ERROR);
+                            nscAlert.setTitle("Module removal error : ");
+                            nscAlert.setContentText("Module : " + userModule + "could not be removed as this module has not scheduled class's");
+                            nscAlert.show();
+                            break;
+                        case "cnf":
+                            displayText.setText("Error Removing Module");
+                            Alert cnfAlert = new Alert(Alert.AlertType.ERROR);
+                            cnfAlert.setTitle("Module removal error : ");
+                            cnfAlert.setContentText("Module : " + userModule + " could not be removed as this module does not exist in the database ");
+                            cnfAlert.show();
+                            break;
+                        case "cr":  //README says 'cr + details' , what details ? //TODO:Fix error ,seanie
+                            displayText.setText("Module removed successfully ");
+                            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                            alert.setTitle("Module removed successfully");
+                            alert.setContentText("Module : " + userModule + "removed successfully , return to see new updated timetable");
+                            alert.show();
+                            break;
+
+                        default:
+                            displayText.setText("Error Adding Module");
+                            Alert unknownErrorAlert = new Alert(Alert.AlertType.ERROR);
+                            unknownErrorAlert.setTitle("Error adding Module : " + userModule);
+                            unknownErrorAlert.setContentText("An unknown error prevented " + userModule + "from being removed");
+                            unknownErrorAlert.show();
+                    }
                 }
-            } catch (Exception ex){
-                displayText.setText("Error Adding Module");
+            } catch ( Exception ex ) {
+                displayText.setText("Error Removing Module");
             }
         });
 
